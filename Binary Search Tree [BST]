@@ -1,0 +1,329 @@
+Binary Search Tree:
+
+#include<iostream>
+using namespace std;
+struct node
+{
+	int data;
+	struct node *left,*right;
+}*root=NULL,*temp,*delnode;
+void inorder(struct node*temp);
+void preorder(struct node*temp);
+void postorder(struct node*temp);
+void printGivenLevel(struct node* temp, int level);
+void levelorder(struct node *temp);
+int height(struct node* temp);
+struct node*insert(struct node *temp,int element);
+struct node*search(struct node *temp,int element);
+struct node * minimum(struct node *temp);
+struct node * maximum(struct node *temp);
+int depth(struct node *temp,int element);
+struct node*deletion(struct node*temp,int element);
+void print(struct node *root, int k);
+
+int main()
+{
+	int choice,con,element,pos;int k;
+	cout<<"1.Insertion\n2.Inorder traversal\n3.Preorder traversal\n4.Postorder traversal\n5.Level order traversal\n6.Heightof the tree\n7.Search\n8.Height of a node\n9.Find minimum\n10.Find Maximum\n11.Depth of a node\n12.Depth of the tree\n 13.Deletion\n";
+	while(1)
+	{
+		cout<<"\nEnter the choice: ";
+		cin>>choice;
+		switch(choice)
+		{
+			case 1: cout<<"Enter the element: ";
+					cin>>element;
+					root=insert(root,element);
+					break;
+			case 2: if(root==NULL)
+						cout<<"The tree is empty";
+					else
+					{
+						cout<<"The inorder traversal:";
+						inorder(root);
+					}	
+					break;
+			case 3: if(root==NULL)
+					cout<<"The tree is empty";
+					else
+					{
+						cout<<"The preorder traversal:";
+						preorder(root);
+					}
+						break;
+			case 4: if(root==NULL)
+					cout<<"The tree is empty";
+					else
+					{
+						cout<<"The postorder traversal:";
+						postorder(root);
+					}
+				break;
+			case 5: if(root==NULL)
+					cout<<"The tree is empty";
+					else
+					{
+						cout<<"The levelorder traversal:";
+						levelorder(root);
+					}
+					break;
+			case 6: if(root==NULL)
+					cout<<"The tree is empty";
+					else
+						cout<<"The height of the tree: "<<height(root)<<endl;
+					break;
+			case 7: if(root==NULL)
+					cout<<"The tree is empty";
+					else
+					{
+						cout<<"Enter the element to search:";
+						cin>>element;
+						temp=search(root,element);
+						if(temp!=NULL)
+							cout<<"The element to search is found"<<endl;
+						else
+							cout<<"The element to search is not found"<<endl;
+					}
+					break;
+			case 8: if(root==NULL)
+					cout<<"The tree is empty";
+					else
+					{
+						cout<<"Enter the element to find height:";
+						cin>>element;
+						temp=search(root,element);
+						if(temp==NULL)
+							cout<<"The element is not found";
+						else
+							cout<<"The height of the node:%d"<<height(temp)<<endl;
+					}
+					break;
+			case 9: if(root==NULL)
+					cout<<"The tree is empty";
+					else
+					{
+						temp= minimum(root);
+						cout<<"The minimum element is "<<temp->data<<endl;		
+					}	
+					break;
+			case 10:if(root==NULL)
+					cout<<"The tree is empty";
+					else
+					{
+						temp=maximum(root);
+						cout<<"The maximum element is "<<temp->data<<endl;
+					}
+					break;
+			case 11:if(root==NULL)
+					cout<<"The tree is empty";
+					else
+					{
+						cout<<"Enter the element to find depth:";
+						cin>>element;
+						temp=search(root,element);
+						if(temp==NULL)
+							cout<<"The element is not found";
+						else
+							cout<<"The depth of the node: "<<depth(root,element)<<endl;
+					}
+					break;
+			case 12:if(root==NULL)
+					cout<<"The tree is empty";
+					else
+						cout<<"The depth of the tree: "<<height(root)<<endl;
+						break;
+			case 13:if(root==NULL)
+					cout<<"The tree is empty";
+					else
+					{			
+						cout<<"Enter the element to delete:";
+						cin>>element;
+						root=deletion(root,element);
+					}
+					break;
+			case 14: 
+					 cin>>k;
+					 print(root,k);
+					 break;
+			default: cout<<"Invalid choice"<<endl<<"Would you like to terminate the program (y/n)? : ";
+					 char ch;
+					 cin>>ch;
+					 if(ch=='y')
+					 	exit(1);
+		}
+	}
+	return 0;
+}
+
+void inorder(struct node*temp)
+{
+	if (temp!=NULL)
+	{
+		inorder(temp->left);
+		cout<<temp->data<<" ";
+		inorder(temp->right);
+	}
+}
+void preorder(struct node*temp)
+{
+	if (temp!=NULL)
+	{
+		cout<<temp->data<<" ";	
+		preorder(temp->left);
+		preorder(temp->right);
+	}
+}
+void postorder(struct node*temp)
+{
+	if (temp!=NULL)
+	{		
+		postorder(temp->left);
+		postorder(temp->right);
+		cout<<temp->data<<" ";
+	}
+}
+void printGivenLevel(struct node* temp, int level)
+{
+	if (temp == NULL)
+	return;
+	if (level == 0)
+		cout<<temp->data<<" ";
+	else 
+	{		
+		printGivenLevel(temp->left, level-1);
+		printGivenLevel(temp->right, level-1);
+	}
+}
+void levelorder(struct node *temp)
+{
+	int i,h;
+	h=height(temp);
+	for(i=0;i<=h;i++)
+		printGivenLevel(temp, i);
+}
+int height(struct node* temp)
+{
+	if (temp == NULL)
+	return -1;
+	else 
+	{
+		int lheight = height(temp->left);
+		int rheight = height(temp->right);
+		if (lheight > rheight)
+			return(lheight+1);
+		else 
+			return(rheight+1);
+	}
+}
+struct node*insert(struct node *temp,int element)
+{
+	if (temp == NULL) 
+	{
+		temp=new node();
+    		temp->data=element;
+    		temp->left = temp->right = NULL;
+	}
+    	else
+	{	
+		if (element<temp->data)
+			temp->left  = insert(temp->left, element);
+    		else if(element>temp->data)
+        		temp->right  = insert(temp->right,element);
+		else		
+			cout<<"Element "<<element<<" already exists"<<endl;
+	}
+	return temp;
+}
+struct node*search(struct node *temp,int element)
+{
+	if (temp == NULL) 
+		return temp;
+    else if (element<temp->data)
+		return search(temp->left, element);
+   	else if(element>temp->data)
+   		return search(temp->right,element);
+	else //element==temp->data
+		return temp;
+}
+struct node * minimum(struct node *temp)
+{
+	if(temp==NULL)
+		cout<<"The tree is empty"<<endl;
+	else
+	{
+		while(temp->left!=NULL)
+		{
+		temp=temp->left;
+		}
+	}
+	return temp;
+}
+struct node * maximum(struct node *temp)
+{
+	if(temp==NULL)
+		cout<<"The tree is empty"<<endl;
+	else
+	{
+		while(temp->right!=NULL)
+			temp=temp->right;
+	}
+	return temp;
+}
+int depth(struct node *temp,int element)
+{
+if (temp == NULL)
+	return -1;
+	else 
+	{
+		if(temp->data==element)
+			return 0;
+		else if(element<temp->data)
+			return 1+depth(temp->left,element);
+		else 
+			return 1+depth(temp->right,element);
+	}
+}
+struct node*deletion(struct node*temp,int element)
+{
+	if(temp==NULL)
+		return NULL;
+	else 
+	{
+	if(element==temp->data)
+	{
+		if(temp->left!=NULL && temp->right!=NULL)
+		{
+			delnode=minimum(temp->right);
+			temp->data=delnode->data;
+			temp->right=deletion(temp->right,temp->data);
+		}
+		else
+		{
+			delnode=temp;
+			if(temp->left==NULL)
+				temp=temp->right;
+			else if(temp->right==NULL)
+				temp=temp->left;
+			delete delnode;
+		}
+	}
+	else if(element<temp->data)
+		temp->left=deletion(temp->left,element);
+	else
+		temp->right=deletion(temp->right,element);
+	}
+return temp;
+}
+
+int count = 0;
+void print(struct node *root, int k)
+{
+    if (root != NULL && count <= k)
+    {
+        print(root->right, k);
+        count++;
+        if (count == k)
+               cout<<root->data<<endl;
+       print(root->left, k);
+    }
+}
