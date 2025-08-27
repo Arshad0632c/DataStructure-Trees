@@ -1,0 +1,92 @@
+BINARY TREE INSERTION
+#include<iostream>
+using namespace std;
+struct tree
+{
+	struct tree *left,*right;
+	int data;
+}*root=NULL;
+
+int count=0;
+
+struct tree *insert(struct tree *temp,int ele)
+{
+	int option;
+	if(temp==NULL)
+	{
+		temp=new tree();
+		temp->data=ele;
+		temp->left=NULL;
+		temp->right=NULL;
+	}
+	else
+	{
+		cout<<"Enter the position to insert (1->left; 2->right): ";
+		cin>>option;
+		if(option==1)
+			temp->left=insert(temp->left,ele);
+		else if(option==2)
+			temp->right=insert(temp->right,ele);
+	}
+	return temp;
+}
+void inorder(struct tree *root)
+{
+	if(root!=NULL)
+	{
+		inorder(root->left);
+		cout<<root->data<<" ";
+		inorder(root->right);
+	}
+}
+void preorder(struct tree *root)
+{
+	if(root!=NULL)
+	{
+		cout<<root->data<<" ";
+		preorder(root->left);
+		preorder(root->right);
+	}
+}
+void postorder(struct tree *root)
+{
+	if(root!=NULL)
+	{
+		postorder(root->left);
+		postorder(root->right);
+		cout<<root->data<<" ";
+	}
+}
+int main()
+{
+	int ch,ele;
+	while(1)
+	{
+		cout<<"Choice: ";
+		cin>>ch;
+		switch(ch)
+		{
+			case 1: cout<<"Enter ele: ";
+					cin>>ele;
+					root=insert(root,ele);
+					break;
+			case 2: cout<<"Inorder Traversal:";
+					inorder(root);
+					//cout<<"\nCount= "<<count;
+					cout<<endl;
+					break;
+			case 3: cout<<"Preorder Traversal:";
+					preorder(root);
+					cout<<endl;
+					break;
+			case 4: cout<<"Postorder Traversal:";
+					postorder(root);
+					cout<<"\nCount= "<<count;
+					cout<<endl;
+					break;
+			default: cout<<"INVALID CHOICE\nProgram Terminated\n";
+				 	 exit(0);
+		}
+	}
+	return 0;
+}
